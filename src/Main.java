@@ -1,6 +1,8 @@
+import java.util.Queue;
+
 public class Main {
     public static void main(String[] args) {
-        myList<Integer> list = new myList<Integer>();
+        myList<Integer> list = new myList<>();
         for(int i=0;i<10;i++){
             //System.out.print(" i = "+i+"; ");
             list.add(i);
@@ -17,8 +19,17 @@ public class Main {
         System.out.println("Contains 8: "+list.contains(8));
         System.out.println(" Adding new value ");
         list.add(3,10);
-        for (Integer integer : list) {
-            System.out.print(integer + " ");
+        for (var i = 0; i<list.size(); i++) {
+            System.out.print(i + " ");
         }
+        System.out.println("Queue testing");
+        myQueue<String> queue = new myQueue<>();
+        for(int i=0;i<20;i++){
+            queue.offer("a"+i);
+        }
+        for(int i=0;i<20;i++){
+            System.out.print(queue.remove());
+        }
+
     }
 }

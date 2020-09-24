@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class myList<Type> implements java.util.List<Type> {
-    private myListItem head;
-    private myListItem tail;
+    private myListItem<Type> head;
+    private myListItem<Type> tail;
 
     public myList() {
         tail = null;
@@ -19,7 +19,7 @@ public class myList<Type> implements java.util.List<Type> {
         else if(this.head.next == null)
             return 1;
         else {
-            myListItem current = this.head;
+            myListItem<Type>current = this.head;
             int size = 1;
             while (current.next != null) {
               //  System.out.print(" In the Cycle ");
@@ -33,9 +33,7 @@ public class myList<Type> implements java.util.List<Type> {
 
     @Override
     public boolean isEmpty() {
-        if (this.head == null)
-            return true;
-        return false;
+        return this.head == null;
     }
 
     @Override
@@ -44,19 +42,19 @@ public class myList<Type> implements java.util.List<Type> {
             throw new NullPointerException("Null values are not permitted");
         } else if (this.isEmpty()) {
            // System.out.println("List is empty");
-            myListItem newElem = new myListItem(null, null, type);
+            myListItem<Type>newElem = new myListItem(null, null, type);
             this.head = newElem;
             this.tail = newElem;
             return true;
         } /*else if (this.size() == 100) {
             System.out.println("Size is 1");
-            myListItem newElem = new myListItem(this.head, null, type);
+            myListItem<Type>newElem = new myListItem(this.head, null, type);
             this.head.next = newElem;
             this.tail = newElem;
             return true;
         } */else {
             //System.out.println("Size is more");
-            myListItem newElem = new myListItem(this.tail, null, type);
+            myListItem<Type>newElem = new myListItem(this.tail, null, type);
             this.tail.next = newElem;
             this.tail = newElem;
             return true;
@@ -69,16 +67,29 @@ public class myList<Type> implements java.util.List<Type> {
             throw new IndexOutOfBoundsException("Index is greater than list size");
         else if (index < 0) {
             throw new IndexOutOfBoundsException("Negative indexes are not supported");
-        } else {
+        }
+        else if (this.size()==1){
+            Type data = this.head.data;
+            this.head = null;
+            this.tail = null;
+            return data;
+        }
+        else if (index == 0){
+            Type data = this.head.data;
+            this.head.next.prev = null;
+            this.head = this.head.next;
+            return data;
+        }
+        else {
             int currInd = 0;
-            myListItem current = this.head;
+            myListItem<Type>current = this.head;
             while (currInd < index) {
                 current = current.next;
                 currInd++;
             }
             current.prev.next = current.next;
             current.next.prev = current.prev;
-            return (Type) current.data;
+            return current.data;
         }
     }
 
@@ -89,12 +100,9 @@ public class myList<Type> implements java.util.List<Type> {
         } else if (this.size() == 0) {
             return false;
         } else if (this.size() == 1) {
-            if (this.head.data == o) {
-                return true;
-            } else
-                return false;
+            return this.head.data == o;
         } else {
-            myListItem current = this.head;
+            myListItem<Type>current = this.head;
             while (current.next != null) {
                 if (current.data == o)
                     return true;
@@ -112,12 +120,12 @@ public class myList<Type> implements java.util.List<Type> {
             throw new IndexOutOfBoundsException("Negative index are not supported");
         } else {
             int currInd = 0;
-            myListItem current = this.head;
+            myListItem<Type>current = this.head;
             while (currInd < index) {
                 current = current.next;
                 currInd++;
             }
-            return (Type) current.data;
+            return current.data;
         }
     }
 
@@ -131,12 +139,12 @@ public class myList<Type> implements java.util.List<Type> {
             throw new NullPointerException("Null elements are not permitted");
         } else {
             int currInd = 0;
-            myListItem current = this.head;
+            myListItem<Type>current = this.head;
             while (currInd < index) {
                 current = current.next;
                 currInd++;
             }
-            myListItem newElem = new myListItem(current.prev, current, element);
+            myListItem<Type>newElem = new myListItem(current.prev, current, element);
             current.prev.next = newElem;
             current.prev = newElem;
         }
@@ -235,18 +243,18 @@ public class myList<Type> implements java.util.List<Type> {
     public void addToTheEnd(Type elem) {
 
         if (this.isEmpty()) {
-            myListItem newElem = new myListItem(null, null, elem);
+            myListItem<Type>newElem = new myListItem(null, null, elem);
             this.head = newElem;
             this.tail = newElem;
         } else {
-            myListItem newElem = new myListItem(this.tail, null, elem);
+            myListItem<Type>newElem = new myListItem(this.tail, null, elem);
             this.tail.next = newElem;
             this.tail = newElem;
         }
     }
 
     public Type getByIndex(int index) {
-        myListItem Current = head;
+        myListItem<Type>Current = head;
         int currInd = 0;
         while (Current.next != null) {
             if (currInd == index)
@@ -258,7 +266,7 @@ public class myList<Type> implements java.util.List<Type> {
     }
 
     public boolean isIn(Type value) {
-        myListItem Current = head;
+        myListItem<Type>Current = head;
         while (Current.next != null) {
             if (Current.data == value)
                 return true;
@@ -268,7 +276,7 @@ public class myList<Type> implements java.util.List<Type> {
     }
 
     public void deleteByIndex(int index){
-        myListItem Current = head;
+        myListItem<Type>Current = head;
         int currInd = 0;
         while(Current.next!=null){
            Current = Current.next;
